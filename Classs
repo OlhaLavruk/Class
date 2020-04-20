@@ -1,0 +1,182 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Cons3
+{
+
+
+    class Person
+    {
+        public string name { get; set; }
+        public string surname { get; set; }
+        public System.DateTime dateBirthd { get; set; }
+
+        public Person(string name, string surname, System.DateTime dateBirthd)
+        {
+            this.name = name;
+            this.surname = surname;
+            this.dateBirthd = dateBirthd;
+        }
+        public Person()
+        {
+            this.name = "Olga";
+            this.surname = "Lavruk";
+            this.dateBirthd = new DateTime(7, 10, 2000);
+        }
+        public int DateBirthd
+        {
+            get
+            {
+                return dateBirthd.Year;
+            }
+            set
+            {
+                dateBirthd = new DateTime(value, this.dateBirthd.Day, this.dateBirthd.Month);
+            }
+        }
+        public override string ToString()
+        {
+            return base.ToString() + ": " + this.name + this.surname + this.dateBirthd;
+
+        }
+        public virtual string ToShortString()
+        {
+            return base.ToString() + ": " + this.name + this.surname;
+        }
+
+    } 
+        public enum Education
+        {
+            Specialist,
+            Вachelor,
+            SecondEducation
+        }
+    class Exam
+    {
+        public string nameSubject { get; set; }
+        public int point{ get; set; } 
+        public System.DateTime dateExam{ get; set; }
+        
+        public Exam(string nameSubject, int point, System.DateTime dateExam)
+        {
+            this.nameSubject = nameSubject;
+            this.point = point;
+            this.dateExam = dateExam;
+        }
+        public Exam()
+        {
+            this.nameSubject = "Matan";
+            this.point = 10;
+            this.dateExam = new DateTime(12, 09, 2009);
+        }
+        public override string ToString()
+        {
+            return base.ToString() + ": " + this.nameSubject + this.point + this.dateExam;
+        }
+    }
+    class Student
+    {
+        private Person S;
+        private Education D;
+        private int number;
+        public Exam[] E;
+        public Exam[] ex = new Exam[0];
+
+        public Student(Person S, Education D, int number)
+        {
+            this.S = S;
+            this.D = D;
+            this.number = number;
+        }
+        public Student()
+        {
+            this.S = new Person("Христина", "Щербанік", new DateTime(30,04,2000));
+            this.D = Education.SecondEducation;
+            this.number = 21;
+        }
+        public Person getPerson()
+        {
+            return S;
+        }
+        public Education getEducation()
+        {
+            return D;
+        }
+        public int getInt()
+        {
+            return number;
+        }
+        public Exam[] getExam()
+        {
+            return E;
+        }
+        public double getAvar() 
+        {
+            if (ex.Length > 0)
+            {
+                int sum = 0;
+                for (int i = 0; i < ex.Length; i++)
+                    sum += ex[i].point;
+                return (sum / ex.Length);
+            }
+            return 0;//?
+
+        }
+        
+        public void AddExams(params Exam[] mass)
+        {
+            Exam[] newEx = new Exam[mass.Length + ex.Length];
+            for (int i = 0; i < ex.Length; i++)
+                newEx[i] = ex[i];
+            for (int i = 0; i < mass.Length; i++)
+                newEx[i + ex.Length] = mass[i];
+            ex = newEx;
+        }
+
+        public override string ToString()
+        {
+            string str = "Student= " + S.name + " \nForm= " + D + " \nGroup= " + number + " \nExam= " + ex;
+            str += "\ncount of exams= " + ex.Length;
+            for (int i = 0; i < ex.Length; i++)
+                str += "\n " + ex[i].ToString();
+            return str;
+
+        }
+
+        public string ToShortString()
+        {
+            string str = "Student= " + S.name + " \nForm= " + D + " \nGroup= " + number + " \nExam= " + ex;
+            str += "\nGPA= " + getAvar();
+            return str;
+        }
+
+    }
+          
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            var s = new Student(
+                new Person("Igor", "Vinnychuk", new DateTime(02, 11, 1999)),
+                Education.SecondEducation,
+                21);
+                Console.WriteLine(s.ToShortString());
+                Console.WriteLine("");
+            
+                Console.WriteLine(s);
+
+            s.AddExams(
+                new Exam("jl", 2, new DateTime(12, 05, 2019)),
+                new Exam("lij", 3, new DateTime(12, 03, 2019)),
+                new Exam("ijlk", 10, new DateTime(20, 05, 2019)),
+                new Exam("kjnkj", 12, new DateTime(02, 04, 2019))
+            );
+                Console.WriteLine(s);
+
+                Console.ReadLine();
+        }
+    }
+}
