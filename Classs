@@ -138,18 +138,18 @@ namespace Cons3
 
         public override string ToString()
         {
-            string str = "Student= " + S.name + " \nForm= " + D + " \nGroup= " + number + " \nExam= " + ex;
-            str += "\ncount of exams= " + ex.Length;
+            string str = "Student= " + S.name + "Form= " + D + "Group= " + number + "Exam= " + ex;
+            str += "count of exams= " + ex.Length;
             for (int i = 0; i < ex.Length; i++)
-                str += "\n " + ex[i].ToString();
+                str +=  ex[i].ToString();
             return str;
 
         }
 
         public string ToShortString()
         {
-            string str = "Student= " + S.name + " \nForm= " + D + " \nGroup= " + number + " \nExam= " + ex;
-            str += "\nGPA= " + getAvar();
+            string str = "Student= " + S.name + " Form= " + D + " Group= " + number + "Exam= " + ex;
+            str += "GPA= " + getAvar();
             return str;
         }
 
@@ -168,11 +168,14 @@ namespace Cons3
             
                 Console.WriteLine(s);
 
+            foreach (Education element in Enum.GetValues(typeof(Education)))
+                Console.WriteLine($"{element}");
+
             s.AddExams(
-                new Exam("jl", 2, new DateTime(12, 05, 2019)),
-                new Exam("lij", 3, new DateTime(12, 03, 2019)),
-                new Exam("ijlk", 10, new DateTime(20, 05, 2019)),
-                new Exam("kjnkj", 12, new DateTime(02, 04, 2019))
+                new Exam("API", 2, new DateTime(12, 05, 2019)),
+                new Exam("DyfRiv", 3, new DateTime(12, 03, 2019)),
+                new Exam("Matemat", 10, new DateTime(20, 05, 2019)),
+                new Exam("English", 12, new DateTime(02, 04, 2019))
             );
                 Console.WriteLine(s);
 
