@@ -1,0 +1,290 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Cons3
+{
+
+    class Person:IDateAndCopy
+    {
+        protected string name { get; set; }
+        protected string surname { get; set; }
+        protected System.DateTime dateBirthd { get; set; }
+        public DateTime Date { get; set; }
+       
+        public object DeepCopy() 
+        {
+            Person P = new Person();
+            P.name = name;
+            P.surname = surname;
+            P.dateBirthd = dateBirthd;
+            return P;
+        }
+        
+        public Person(string name, string surname, System.DateTime dateBirthd)
+        {
+            this.name = name;
+            this.surname = surname;
+            this.dateBirthd = dateBirthd;
+        }
+        public Person()
+        {
+            this.name = "Olga";
+            this.surname = "Lavruk";
+            this.dateBirthd = new DateTime(2000, 7, 10);
+        }
+        public int DateBirthd
+        {
+            get
+            {
+                return dateBirthd.Year;
+            }
+            set
+            {
+                dateBirthd = new DateTime(value, this.dateBirthd.Day, this.dateBirthd.Month);
+            }
+        }
+        public override string ToString()
+        {
+            return base.ToString() + ": " + this.name + this.surname + this.dateBirthd;
+
+        }
+        public virtual string ToShortString()
+        {
+            return base.ToString() + ": " + this.name + this.surname;
+        }
+
+        public override int GetHashCode()
+        {
+            return name.GetHashCode();
+        }
+        public override bool Equals(object obj)
+        {
+            if (obj.GetType() != this.GetType()) return false;
+            Person person = (Person)obj;
+            return (this.name == person.name &&
+                surname == person.surname &&
+                dateBirthd == person.dateBirthd);
+        }
+    } 
+        public enum Education
+        {
+            Specialist,
+            Вachelor,
+            SecondEducation
+        }
+    interface IDateAndCopy
+    {
+        object DeepCopy();
+        DateTime Date { get; set; }
+    }
+    class Exam: IDateAndCopy
+    {
+        public string nameSubject { get; set; }
+        public int point{ get; set; } 
+        public System.DateTime dateExam{ get; set; }
+
+        public object DeepCopy()
+        {
+            Exam Exz = new Exam();
+            Exz.nameSubject = nameSubject;
+            Exz.point = point;
+            Exz.dateExam = dateExam;
+            return Exz;
+        }
+        public DateTime Date { get; set; }
+        public Exam(string nameSubject, int point, System.DateTime dateExam)
+        {
+            this.nameSubject = nameSubject;
+            this.point = point;
+            this.dateExam = dateExam;
+        }
+        public Exam()
+        {
+            this.nameSubject = "Matan";
+            this.point = 10;
+            this.dateExam = new DateTime(2009, 12, 09);
+        }
+        public override string ToString()
+        {
+            return base.ToString() + ": " + this.nameSubject + this.point + this.dateExam;
+        }
+    }
+    class Student:Person,IDateAndCopy
+    {
+        private Education D;
+        private int number;
+        private List<Exam> Ex = new List<Exam>();
+        private List<Test> Tes = new List<Test>();
+
+        public object DeepCopy()
+        {
+            Student S = new Student();
+            S.number= number;
+            S.D = D;
+            return S;
+        }
+        public DateTime Date { get; set; }
+        public Student(string name, string surname, DateTime dateBirthd, Education D, int number): base(name, surname, dateBirthd)
+        {
+            this.D = D;
+            this.number = number;
+
+           
+         }
+        public Student()
+        {
+            Person S = new Person("Христина", "Щербанік", new DateTime(2000,10,04));
+            this.D = Education.SecondEducation;
+            this.number = 21;
+        }
+        public Person getPerson
+        {
+            get
+            {
+                Person pers = new Person();
+                pers.name = this.name;
+                pers.surname = this.name;
+                pers.dateBirthd = this.dateBirthd;
+
+                return pers; 
+            }
+            set
+            {
+                this.name= value;
+            }
+        } 
+        
+        public Education getEducation()
+        {
+            return D;
+        }
+        public int getInt()
+        {
+            return number;
+        }
+        public double getAvar() 
+        {
+            if (Ex.Count > 0)
+            {
+                double sum = 0;
+                for (int i = 0; i < Ex.Count; i++)
+                   sum += i;
+                return (sum / Ex.Count);
+            }
+            return 0;//&
+        }
+
+        public List<Exam> PassedExams
+        {
+            get { return (Ex.ToArray().Clone() as Exam[]).ToList(); }
+        }
+        public void AddExams(params Exam[] exams)
+        {
+            if (exams != null && exams.Any())
+            {
+                Ex.AddRange(exams);
+            }
+        }
+
+        public override string ToString()
+        {
+            string str = "Student= " + name + "Form= " + D + "Group= " + number + "Exam= " + Ex;
+            str += "count of exams= " + Ex.Count;
+            for (int i = 0; i < Ex.Count; i++)
+                str +=  Ex[i].ToString();
+            return str;
+
+        }
+
+        public string ToShortString()
+        {
+            string str = "Student= " + name + " Form of educ= " + D + " /n Group= " + number + "/n Exam= " + Ex;
+            str += "/n GPA= " + getAvar();
+            return str;
+        }
+
+    }
+    class Test 
+    
+    {
+        public string nameTest { get; set; }
+        public bool zdachaTest { get; set; }
+
+        public Test(string nameTest, bool zdachaTest)
+        {
+            this.nameTest = nameTest;
+            this.zdachaTest = zdachaTest;
+        }
+
+        public Test()
+        {
+            this.nameTest = "Test1";
+            this.zdachaTest = false;
+        }
+  
+        public override string ToString()
+        {
+            return base.ToString() + ": " + this.nameTest + this.zdachaTest;
+        }
+    }
+          
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            var p = new Person("Olha", "Lavruk", new DateTime(1999, 02, 11));
+                Console.WriteLine("");
+           
+            var ph = new Person("Olha", "Valnuk", new DateTime(1999, 02, 11));
+            Console.WriteLine("");
+
+           
+            var m = new Student("Olha", "Valnuk", new DateTime(1999, 02, 11),
+                Education.SecondEducation, 21);
+            Console.WriteLine(m.ToShortString());
+            Console.WriteLine("");
+
+            Console.WriteLine(m);
+
+            // foreach (Education element in Enum.GetValues(typeof(Education)))
+            // Console.WriteLine($"{element}");
+
+            m.AddExams(
+                new Exam("API", 2, new DateTime(2019, 12, 05)),
+                new Exam("DyfRiv", 3, new DateTime(2019, 12, 03)),
+                new Exam("Matemat", 10, new DateTime(2019, 10, 05)),
+                new Exam("English", 12, new DateTime(2019, 02, 04))
+            );
+                Console.WriteLine(m);
+            try
+            {
+                m.getInt();
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("\n" + e.Message);
+            }
+            Console.WriteLine();
+            Console.WriteLine("9");
+            Console.WriteLine();
+            foreach (Exam e in m.Exam)
+            {
+                Console.WriteLine(e.ToString());
+            }
+            
+            Console.WriteLine();
+            Console.WriteLine("10");
+            Console.WriteLine();
+            for (int i = 0; i < m.Exam.Count; i++)
+            {
+                if (m.Exam[i].Rating > 3)
+                    Console.WriteLine(m.Exam[i].ToString());
+            }
+            Console.ReadLine();
+        }
+    }
+}
