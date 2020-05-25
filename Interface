@@ -116,8 +116,8 @@ namespace Cons3
     {
         private Education D;
         private int number;
-        private List<Exam> Ex = new List<Exam>();
-        private List<Test> Tes = new List<Test>();
+        private System.Colections.ArrayList Exam = new ArrayList();
+        private System.Colections.ArrayList Test = new ArrayList();
 
         public object DeepCopy()
         {
@@ -132,8 +132,17 @@ namespace Cons3
             this.D = D;
             this.number = number;
 
-           
          }
+        public System.Colections.ArrayList Exam = new ArrayList
+        {
+          get{return Exam;}
+          set{value= Exam;}
+        }
+        public System.Colections.ArrayList Test = new ArrayList();
+        {
+          get{return Test;}
+          set{value= Test;}
+        }
         public Student()
         {
             Person S = new Person("Христина", "Щербанік", new DateTime(2000,10,04));
@@ -167,34 +176,34 @@ namespace Cons3
         }
         public double getAvar() 
         {
-            if (Ex.Count > 0)
+            if (Exam.Count > 0)
             {
                 double sum = 0;
-                for (int i = 0; i < Ex.Count; i++)
+                for (int i = 0; i < Exam.Count; i++)
                    sum += i;
-                return (sum / Ex.Count);
+                return (sum / Exam.Count);
             }
             return 0;//&
         }
 
         public List<Exam> PassedExams
         {
-            get { return (Ex.ToArray().Clone() as Exam[]).ToList(); }
+            get { return (Exam.ToArray().Clone() as Exam[]).ToList(); }
         }
         public void AddExams(params Exam[] exams)
         {
             if (exams != null && exams.Any())
             {
-                Ex.AddRange(exams);
+                Exam.AddRange(exams);
             }
         }
 
         public override string ToString()
         {
             string str = "Student= " + name + "Form= " + D + "Group= " + number + "Exam= " + Ex;
-            str += "count of exams= " + Ex.Count;
-            for (int i = 0; i < Ex.Count; i++)
-                str +=  Ex[i].ToString();
+            str += "count of exams= " + Exam.Count;
+            for (int i = 0; i < Exam.Count; i++)
+                str +=  Exam.ToString();
             return str;
 
         }
@@ -205,6 +214,12 @@ namespace Cons3
             str += "/n GPA= " + getAvar();
             return str;
         }
+        public IEnumerator GetEnumerator()
+        {
+            foreach(test tes in Test)
+            { 
+                yeld return tes.ToString()
+            }
 
     }
     class Test 
@@ -249,8 +264,11 @@ namespace Cons3
 
             Console.WriteLine(m);
 
-            // foreach (Education element in Enum.GetValues(typeof(Education)))
-            // Console.WriteLine($"{element}");
+            foreach (test tes in m)
+            
+            {
+                Console.WriteLine(tes);
+            }
 
             m.AddExams(
                 new Exam("API", 2, new DateTime(2019, 12, 05)),
